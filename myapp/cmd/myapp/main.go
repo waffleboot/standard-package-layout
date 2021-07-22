@@ -2,9 +2,10 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
-	"github.com/benbjohnson/myapp/http"
+	myhttp "github.com/benbjohnson/myapp/http"
 	"github.com/benbjohnson/myapp/postgres"
 )
 
@@ -17,6 +18,9 @@ func main() {
 
 	us := &postgres.UserService{DB: db}
 
-	var h http.Handler
+	var h myhttp.Handler
 	h.UserService = us
+	if err := http.ListenAndServe(":8080", &h); err != nil {
+		log.Fatal(err)
+	}
 }
